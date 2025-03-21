@@ -52,7 +52,7 @@ export class PipelineStack extends Stack {
 
     const artifactBucket = new Bucket(this, 'ArtifactBucket', 
       {
-        bucketName:`health-manager-${envName}-codepipeline-artifact-bucket`,
+        bucketName:`haroldtkh-${envName}-codepipeline-artifact-bucket`,
         removalPolicy: RemovalPolicy.DESTROY,
       });
 
@@ -102,7 +102,7 @@ export class PipelineStack extends Stack {
     this,
     'CIPipeline', 
     {
-      pipelineName: `health-manager-${envName}-CI-Pipeline`,
+      pipelineName: `haroldtkh-${envName}-CI-Pipeline`,
       role: infrastructureDeployRole,
       artifactBucket
     }
