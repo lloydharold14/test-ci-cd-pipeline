@@ -14,24 +14,14 @@ interface InfrastructureStackProps extends StackProps {
   
       console.log(`${DEPLOY_ENVIRONMENT} environment detected. deploying s3 bucket.`)
   
-      const infraBucket = new Bucket(
-        this,
-        "InfraBucket",
-        {
-          bucketName: `health-manager-${DEPLOY_ENVIRONMENT}-infrastructure-bucket`,
-          removalPolicy: RemovalPolicy.DESTROY
-        }
-      )
-
-      // Deploy the Company Service
-       new CompanyServiceStack(
-        this,
-         `${DEPLOY_ENVIRONMENT}-CompanyService-Stack`, 
-         {
-           DEPLOY_ENVIRONMENT,
-           description: `Stack for the ${DEPLOY_ENVIRONMENT} CompanyService deployed using the CI pipeline. If you need to delete everything involving the ${DEPLOY_ENVIRONMENT} environment, delete this stack first, then the CI stack.`
-         }
-       );
+      // const infraBucket = new Bucket(
+      //   this,
+      //   "InfraBucket",
+      //   {
+      //     bucketName: `health-manager-${DEPLOY_ENVIRONMENT}-infrastructure-bucket`,
+      //     removalPolicy: RemovalPolicy.DESTROY
+      //   }
+      // )
 
     }
   }
