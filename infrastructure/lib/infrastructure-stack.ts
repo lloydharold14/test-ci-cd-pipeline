@@ -24,9 +24,14 @@ interface InfrastructureStackProps extends StackProps {
       )
 
       // Deploy the Company Service
-       const companyServiceStack = new CompanyServiceStack(this, 'CompanyServiceStack', {
-         DEPLOY_ENVIRONMENT
-       });
+       new CompanyServiceStack(
+        this,
+         `${DEPLOY_ENVIRONMENT}-CompanyService-Stack`, 
+         {
+           DEPLOY_ENVIRONMENT,
+           description: `Stack for the ${DEPLOY_ENVIRONMENT} CompanyService deployed using the CI pipeline. If you need to delete everything involving the ${DEPLOY_ENVIRONMENT} environment, delete this stack first, then the CI stack.`
+         }
+       );
 
     }
   }
