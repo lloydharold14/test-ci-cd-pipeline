@@ -22,25 +22,5 @@ interface InfrastructureStackProps extends StackProps {
           removalPolicy: RemovalPolicy.DESTROY
         }
       )
-
-      const ddbTable = new TableV2(
-            this,
-            "DynamoDbTable",
-            {
-              partitionKey: {
-                name: "user_id",
-                type: AttributeType.STRING
-              },
-              sortKey: {
-                name: "timestamp",
-                type: AttributeType.NUMBER
-              },
-              tableName: "SampleTable",
-              billing: Billing.onDemand(),
-              removalPolicy: RemovalPolicy.DESTROY,
-            }
-          )
-
-
     }
   }
