@@ -1,7 +1,7 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
-import { TableV2, Billing, AttributeType } from 'aws-cdk-lib/aws-dynamodb';
+import { CompanyServiceStack } from './microservices/company-service-stack';
 
 interface InfrastructureStackProps extends StackProps {
   DEPLOY_ENVIRONMENT: string;}
@@ -22,5 +22,9 @@ interface InfrastructureStackProps extends StackProps {
           removalPolicy: RemovalPolicy.DESTROY
         }
       )
+
+      // Deploy the Company Service
+       const companyServiceStack = new CompanyServiceStack(this, 'CompanyServiceStack');
+
     }
   }
