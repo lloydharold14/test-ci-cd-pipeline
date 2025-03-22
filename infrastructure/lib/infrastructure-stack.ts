@@ -24,7 +24,9 @@ interface InfrastructureStackProps extends StackProps {
       )
 
       // Deploy the Company Service
-       const companyServiceStack = new CompanyServiceStack(this, 'CompanyServiceStack');
+       const companyServiceStack = new CompanyServiceStack(this, 'CompanyServiceStack', {
+         DEPLOY_ENVIRONMENT
+       });
 
     }
   }

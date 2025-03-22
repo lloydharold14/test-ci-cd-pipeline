@@ -4,12 +4,14 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
+interface CompanyServiceStackProps extends StackProps {
+    DEPLOY_ENVIRONMENT: string;}
 
 export class CompanyServiceStack extends Stack {
   public readonly companyTable: dynamodb.Table;
   public readonly doctorCompanyTable: dynamodb.Table;
 
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props: CompanyServiceStackProps) {
     super(scope, id, props);
 
     // DynamoDB Tables
