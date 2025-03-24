@@ -53,7 +53,7 @@ export class CompanyServiceStack extends Stack {
 
     // Lambda Functions
     const createCompanyLambda = new NodejsFunction(this, 'CreateCompanyLambda', {
-        entry: 'lambda/company-service/create-company.ts',
+        entry: 'lib/lambda/company-service/create-company.ts',
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_18_X,
         environment: {

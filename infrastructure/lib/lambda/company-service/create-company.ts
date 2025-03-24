@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
-import { Company } from '../../lib/models/Company';
-import { buildResponse } from '../../lib/utils/response-builder';
-import { AppError, handleError } from '../../lib/utils/error-handler';
-import { logger } from  '../../lib/utils/logger';
+import { Company } from '../../models/Company';
+import { buildResponse } from '../../utils/response-builder';
+import { AppError, handleError } from '../../utils/error-handler';
+import { logger } from  '../../utils/logger';
 
 const dynamoDb = new DynamoDB.DocumentClient();
 const tableName = process.env.COMPANY_TABLE;
