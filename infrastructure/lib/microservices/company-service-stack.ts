@@ -52,7 +52,7 @@ export class CompanyServiceStack extends Stack {
 
     // Lambda Functions
     const createCompanyLambda = new lambda.Function(this, 'CreateCompanyLambda', {
-      runtime: lambda.Runtime.NODEJS_22_X,
+      runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'create-company.handler',
       code: lambda.Code.fromAsset('lambda/company-service'),
       environment: {
@@ -61,7 +61,7 @@ export class CompanyServiceStack extends Stack {
     });
 
     const getCompanyLambda = new lambda.Function(this, 'GetCompanyLambda', {
-      runtime: lambda.Runtime.NODEJS_22_X,
+      runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'get-company.handler',
       code: lambda.Code.fromAsset('lambda/company-service'),
       environment: {
@@ -70,7 +70,7 @@ export class CompanyServiceStack extends Stack {
     });
 
     const addDoctorLambda = new lambda.Function(this, 'AddDoctorLambda', {
-      runtime: lambda.Runtime.NODEJS_22_X,
+      runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'add-doctor.handler',
       code: lambda.Code.fromAsset('lambda/company-service'),
       environment: {
