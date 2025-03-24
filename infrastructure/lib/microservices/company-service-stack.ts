@@ -15,39 +15,40 @@ export class CompanyServiceStack extends Stack {
 
     const companyTable = new TableV2(
         this,
-        "DynamoDbTable",
+        "CompanyTableConstruct", // Unique ID for the company table
         {
           partitionKey: {
             name: "companyId",
-            type: AttributeType.STRING
+            type: AttributeType.STRING,
           },
           sortKey: {
             name: "timestamp",
-            type: AttributeType.NUMBER
+            type: AttributeType.NUMBER,
           },
           tableName: "CompanyTable",
           billing: Billing.onDemand(),
           removalPolicy: RemovalPolicy.DESTROY,
         }
-      )
-
+      );
+      
       const doctorCompanyTable = new TableV2(
         this,
-        "DynamoDbTable",
+        "DoctorCompanyTableConstruct", // Unique ID for the doctor-company table
         {
           partitionKey: {
             name: "doctorId",
-            type: AttributeType.STRING
+            type: AttributeType.STRING,
           },
           sortKey: {
             name: "companyId",
-            type: AttributeType.STRING
+            type: AttributeType.STRING,
           },
           tableName: "DoctorCompanyTable",
           billing: Billing.onDemand(),
           removalPolicy: RemovalPolicy.DESTROY,
         }
-      )
+      );
+      
 
     // Lambda Functions
     const createCompanyLambda = new lambda.Function(this, 'CreateCompanyLambda', {
