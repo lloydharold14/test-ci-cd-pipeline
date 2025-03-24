@@ -38,7 +38,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       Item: {
         companyId,
         name: company.name,
-        createdAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       },
     };
 
