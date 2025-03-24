@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import { AttributeType, Billing, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 
 interface CompanyServiceStackProps extends StackProps {
     DEPLOY_ENVIRONMENT: string;}
@@ -13,6 +14,24 @@ export class CompanyServiceStack extends Stack {
 
   constructor(scope: Construct, id: string, props: CompanyServiceStackProps) {
     super(scope, id, props);
+
+    const ddbTable = new TableV2(
+        this,
+        "DynamoDbTable",
+        {
+          partitionKey: {
+            name: "user_id",
+            type: AttributeType.STRING
+          },
+          sortKey: {
+            name: "timestamp",
+            type: AttributeType.NUMBER
+          },
+          tableName: "SampleTable",
+          billing: Billing.onDemand(),
+          removalPolicy: RemovalPolicy.DESTROY,
+        }
+      )
 
     // DynamoDB Tables
     this.companyTable = new dynamodb.Table(this, 'CompanyTable', {

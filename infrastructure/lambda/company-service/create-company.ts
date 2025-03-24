@@ -13,8 +13,8 @@ if (!tableName) {
 }
 
 
-export const handler = async (event: APIGatewayProxyEvent, aPIGatewayProxyResult: APIGatewayProxyResult ): Promise<APIGatewayProxyResult> => {
-  try {
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    try {
     //logger.info('Request received to create a company', { event });
 
     console.log(`Request received to create a company`)

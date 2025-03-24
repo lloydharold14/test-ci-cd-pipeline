@@ -1,7 +1,6 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
-import { CompanyServiceStack } from './microservices/company-service-stack';
 
 interface InfrastructureStackProps extends StackProps {
   DEPLOY_ENVIRONMENT: string;
