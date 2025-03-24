@@ -52,14 +52,15 @@ export class CompanyServiceStack extends Stack {
       
 
     // Lambda Functions
-const createCompanyLambda = new NodejsFunction(this, 'CreateCompanyLambda', {
-  entry: 'lambda/company-service/create-company.ts',
-  handler: 'handler',
-  runtime: lambda.Runtime.NODEJS_LATEST,
-  environment: {
-    COMPANY_TABLE: companyTable.tableName,
-  },
-});
+    const createCompanyLambda = new NodejsFunction(this, 'CreateCompanyLambda', {
+        entry: 'lambda/company-service/create-company.ts',
+        handler: 'handler',
+        runtime: lambda.Runtime.NODEJS_18_X,
+        environment: {
+          COMPANY_TABLE: companyTable.tableName,
+        },
+      });
+      
 
     // Grant permissions to Lambda functions
     companyTable.grantReadWriteData(createCompanyLambda);
@@ -79,10 +80,10 @@ const createCompanyLambda = new NodejsFunction(this, 'CreateCompanyLambda', {
     companiesResource.addMethod('POST', new apigateway.LambdaIntegration(createCompanyLambda));
     //companiesResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
 
-    const companyResource = companiesResource.addResource('{companyId}');
-   // companyResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
+//     const companyResource = companiesResource.addResource('{companyId}');
+//    // companyResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
 
-    const doctorsResource = companyResource.addResource('doctors');
-   // doctorsResource.addMethod('POST', new apigateway.LambdaIntegration(addDoctorLambda));
+//     const doctorsResource = companyResource.addResource('doctors');
+//    // doctorsResource.addMethod('POST', new apigateway.LambdaIntegration(addDoctorLambda));
   }
 }
