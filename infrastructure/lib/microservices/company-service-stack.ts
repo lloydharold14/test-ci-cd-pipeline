@@ -64,7 +64,10 @@ export class CompanyServiceStack extends Stack {
     // API Gateway
     const api = new apigateway.RestApi(this, 'CompanyApi', {
       restApiName: 'Company Service',
-      deploy: true
+      deploy: true,
+      deployOptions: {
+        stageName: props.DEPLOY_ENVIRONMENT,
+      },
     });
 
     const companiesResource = api.root.addResource('companies');
