@@ -7,7 +7,11 @@ import { AppError, handleError } from '../../lib/utils/error-handler';
 import { logger } from  '../../lib/utils/logger';
 
 const dynamoDb = new DynamoDB.DocumentClient();
-const tableName = process.env.COMPANY_TABLE; // DynamoDB table name from environment variables
+const tableName = process.env.COMPANY_TABLE;
+if (!tableName) {
+  throw new Error("COMPANY_TABLE environment variable is not defined");
+}
+
 
 export const handler = async (event: APIGatewayProxyEvent, aPIGatewayProxyResult: APIGatewayProxyResult ): Promise<APIGatewayProxyResult> => {
   try {
@@ -30,7 +34,7 @@ export const handler = async (event: APIGatewayProxyEvent, aPIGatewayProxyResult
 
     // Prepare the DynamoDB item
     const params = {
-      TableName: "CompanyTable",
+      TableName: tableName,
       Item: {
         companyId,
         name: company.name,
