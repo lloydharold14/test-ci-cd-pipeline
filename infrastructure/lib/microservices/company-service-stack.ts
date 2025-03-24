@@ -1,6 +1,7 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, Billing, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 
@@ -51,37 +52,19 @@ export class CompanyServiceStack extends Stack {
       
 
     // Lambda Functions
-    const createCompanyLambda = new lambda.Function(this, 'CreateCompanyLambda', {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'create-company.handler',
-      code: lambda.Code.fromAsset('lambda/company-service'),
-      environment: {
-        COMPANY_TABLE: companyTable.tableName,
-      },
-    });
-
-    const getCompanyLambda = new lambda.Function(this, 'GetCompanyLambda', {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'get-company.handler',
-      code: lambda.Code.fromAsset('lambda/company-service'),
-      environment: {
-        COMPANY_TABLE: doctorCompanyTable.tableName,
-      },
-    });
-
-    const addDoctorLambda = new lambda.Function(this, 'AddDoctorLambda', {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'add-doctor.handler',
-      code: lambda.Code.fromAsset('lambda/company-service'),
-      environment: {
-        DOCTOR_COMPANY_TABLE: doctorCompanyTable.tableName,
-      },
-    });
+const createCompanyLambda = new NodejsFunction(this, 'CreateCompanyLambda', {
+  entry: 'lambda/company-service/create-company.ts',
+  handler: 'handler',
+  runtime: lambda.Runtime.NODEJS_LATEST,
+  environment: {
+    COMPANY_TABLE: companyTable.tableName,
+  },
+});
 
     // Grant permissions to Lambda functions
     companyTable.grantReadWriteData(createCompanyLambda);
-    companyTable.grantReadData(getCompanyLambda);
-    doctorCompanyTable.grantReadWriteData(addDoctorLambda);
+    // companyTable.grantReadData(getCompanyLambda);
+    // doctorCompanyTable.grantReadWriteData(addDoctorLambda);
 
     // API Gateway
     const api = new apigateway.RestApi(this, 'CompanyApi', {
@@ -94,12 +77,12 @@ export class CompanyServiceStack extends Stack {
 
     const companiesResource = api.root.addResource('companies');
     companiesResource.addMethod('POST', new apigateway.LambdaIntegration(createCompanyLambda));
-    companiesResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
+    //companiesResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
 
     const companyResource = companiesResource.addResource('{companyId}');
-    companyResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
+   // companyResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
 
     const doctorsResource = companyResource.addResource('doctors');
-    doctorsResource.addMethod('POST', new apigateway.LambdaIntegration(addDoctorLambda));
+   // doctorsResource.addMethod('POST', new apigateway.LambdaIntegration(addDoctorLambda));
   }
 }
