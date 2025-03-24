@@ -50,56 +50,56 @@ export class CompanyServiceStack extends Stack {
       );
       
 
-    // Lambda Functions
-    const createCompanyLambda = new lambda.Function(this, 'CreateCompanyLambda', {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'create-company.handler',
-      code: lambda.Code.fromAsset('lambda/company-service'),
-      environment: {
-        COMPANY_TABLE: companyTable.tableName,
-      },
-    });
+//     // Lambda Functions
+//     const createCompanyLambda = new lambda.Function(this, 'CreateCompanyLambda', {
+//       runtime: lambda.Runtime.NODEJS_LATEST,
+//       handler: 'create-company.handler',
+//       code: lambda.Code.fromAsset('lambda/company-service'),
+//       environment: {
+//         COMPANY_TABLE: companyTable.tableName,
+//       },
+//     });
 
-    const getCompanyLambda = new lambda.Function(this, 'GetCompanyLambda', {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'get-company.handler',
-      code: lambda.Code.fromAsset('lambda/company-service'),
-      environment: {
-        COMPANY_TABLE: doctorCompanyTable.tableName,
-      },
-    });
+//     const getCompanyLambda = new lambda.Function(this, 'GetCompanyLambda', {
+//       runtime: lambda.Runtime.NODEJS_LATEST,
+//       handler: 'get-company.handler',
+//       code: lambda.Code.fromAsset('lambda/company-service'),
+//       environment: {
+//         COMPANY_TABLE: doctorCompanyTable.tableName,
+//       },
+//     });
 
-    const addDoctorLambda = new lambda.Function(this, 'AddDoctorLambda', {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'add-doctor.handler',
-      code: lambda.Code.fromAsset('lambda/company-service'),
-      environment: {
-        DOCTOR_COMPANY_TABLE: doctorCompanyTable.tableName,
-      },
-    });
+//     const addDoctorLambda = new lambda.Function(this, 'AddDoctorLambda', {
+//       runtime: lambda.Runtime.NODEJS_LATEST,
+//       handler: 'add-doctor.handler',
+//       code: lambda.Code.fromAsset('lambda/company-service'),
+//       environment: {
+//         DOCTOR_COMPANY_TABLE: doctorCompanyTable.tableName,
+//       },
+//     });
 
-    // Grant permissions to Lambda functions
-    companyTable.grantReadWriteData(createCompanyLambda);
-    companyTable.grantReadData(getCompanyLambda);
-    doctorCompanyTable.grantReadWriteData(addDoctorLambda);
+//     // Grant permissions to Lambda functions
+//     companyTable.grantReadWriteData(createCompanyLambda);
+//     companyTable.grantReadData(getCompanyLambda);
+//     doctorCompanyTable.grantReadWriteData(addDoctorLambda);
 
-    // API Gateway
-    const api = new apigateway.RestApi(this, 'CompanyApi', {
-      restApiName: 'Company Service',
-      deploy: true,
-      deployOptions: {
-        stageName: props.DEPLOY_ENVIRONMENT,
-      },
-    });
+//     // API Gateway
+//     const api = new apigateway.RestApi(this, 'CompanyApi', {
+//       restApiName: 'Company Service',
+//       deploy: true,
+//       deployOptions: {
+//         stageName: props.DEPLOY_ENVIRONMENT,
+//       },
+//     });
 
-    const companiesResource = api.root.addResource('companies');
-    companiesResource.addMethod('POST', new apigateway.LambdaIntegration(createCompanyLambda));
-    companiesResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
+//     const companiesResource = api.root.addResource('companies');
+//     companiesResource.addMethod('POST', new apigateway.LambdaIntegration(createCompanyLambda));
+//     companiesResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
 
-    const companyResource = companiesResource.addResource('{companyId}');
-    companyResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
+//     const companyResource = companiesResource.addResource('{companyId}');
+//     companyResource.addMethod('GET', new apigateway.LambdaIntegration(getCompanyLambda));
 
-    const doctorsResource = companyResource.addResource('doctors');
-    doctorsResource.addMethod('POST', new apigateway.LambdaIntegration(addDoctorLambda));
-  }
+//     const doctorsResource = companyResource.addResource('doctors');
+//     doctorsResource.addMethod('POST', new apigateway.LambdaIntegration(addDoctorLambda));
+   }
 }
