@@ -1,6 +1,5 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, Billing, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
@@ -9,43 +8,46 @@ interface CompanyServiceStackProps extends StackProps {
     DEPLOY_ENVIRONMENT: string;}
 
 export class CompanyServiceStack extends Stack {
-  public readonly companyTable: dynamodb.Table;
-  public readonly doctorCompanyTable: dynamodb.Table;
+
 
   constructor(scope: Construct, id: string, props: CompanyServiceStackProps) {
     super(scope, id, props);
 
-    const ddbTable = new TableV2(
+    const companyTable = new TableV2(
         this,
         "DynamoDbTable",
         {
           partitionKey: {
-            name: "user_id",
+            name: "companyId",
             type: AttributeType.STRING
           },
           sortKey: {
             name: "timestamp",
             type: AttributeType.NUMBER
           },
-          tableName: "SampleTable",
+          tableName: "CompanyTable",
           billing: Billing.onDemand(),
           removalPolicy: RemovalPolicy.DESTROY,
         }
       )
 
-    // DynamoDB Tables
-    this.companyTable = new dynamodb.Table(this, 'CompanyTable', {
-      partitionKey: { name: 'companyId', type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
-
-    this.doctorCompanyTable = new dynamodb.Table(this, 'DoctorCompanyTable', {
-      partitionKey: { name: 'doctorId', type: dynamodb.AttributeType.STRING },
-      sortKey: { name: 'companyId', type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
+      const doctorCompanyTable = new TableV2(
+        this,
+        "DynamoDbTable",
+        {
+          partitionKey: {
+            name: "doctorId",
+            type: AttributeType.STRING
+          },
+          sortKey: {
+            name: "companyId",
+            type: AttributeType.STRING
+          },
+          tableName: "DoctorCompanyTable",
+          billing: Billing.onDemand(),
+          removalPolicy: RemovalPolicy.DESTROY,
+        }
+      )
 
     // Lambda Functions
     const createCompanyLambda = new lambda.Function(this, 'CreateCompanyLambda', {
@@ -53,7 +55,7 @@ export class CompanyServiceStack extends Stack {
       handler: 'create-company.handler',
       code: lambda.Code.fromAsset('lambda/company-service'),
       environment: {
-        COMPANY_TABLE: this.companyTable.tableName,
+        COMPANY_TABLE: companyTable.tableName,
       },
     });
 
@@ -62,7 +64,7 @@ export class CompanyServiceStack extends Stack {
       handler: 'get-company.handler',
       code: lambda.Code.fromAsset('lambda/company-service'),
       environment: {
-        COMPANY_TABLE: this.companyTable.tableName,
+        COMPANY_TABLE: doctorCompanyTable.tableName,
       },
     });
 
@@ -71,14 +73,14 @@ export class CompanyServiceStack extends Stack {
       handler: 'add-doctor.handler',
       code: lambda.Code.fromAsset('lambda/company-service'),
       environment: {
-        DOCTOR_COMPANY_TABLE: this.doctorCompanyTable.tableName,
+        DOCTOR_COMPANY_TABLE: doctorCompanyTable.tableName,
       },
     });
 
     // Grant permissions to Lambda functions
-    this.companyTable.grantReadWriteData(createCompanyLambda);
-    this.companyTable.grantReadData(getCompanyLambda);
-    this.doctorCompanyTable.grantReadWriteData(addDoctorLambda);
+    companyTable.grantReadWriteData(createCompanyLambda);
+    companyTable.grantReadData(getCompanyLambda);
+    doctorCompanyTable.grantReadWriteData(addDoctorLambda);
 
     // API Gateway
     const api = new apigateway.RestApi(this, 'CompanyApi', {
